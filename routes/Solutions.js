@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const checkAuth = require('../middleware/check');
-const solutionsController = require('../Controller/Solutions');
+const solutionsController = require('../controller/Solutions');
 
 router.get('/:problemId',solutionsController.get_all_solutions);
 router.post('/',checkAuth,solutionsController.add_solution);

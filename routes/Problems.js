@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const checkAuth = require('../middleware/check');
-const problemsController = require('../Controller/Problems');
+const problemsController = require('../controller/Problems');
 
 router.get('/',problemsController.get_all_problems);
 router.post('/',checkAuth,problemsController.add_problem);
