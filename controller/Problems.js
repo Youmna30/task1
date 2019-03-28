@@ -45,21 +45,8 @@ exports.add_problem = (req,res,next) => {
 }
 exports.delete_problem = (req,res,next)=>{
   const id = req.params.problemId;
-  Problem.findById(id)
-  .select('statement user_id')
-  .exec()
-  .then(doc => {
-    if(doc){
-      if(doc.user_id != req.userData.userId)
-      {
-        //console.log(doc.user_id+"---"+req.userData._id);
-        return res.status(404).json({
-         message:"You Can't Delete"
-       });
-      }
-      return Problem.remove({_id:id}).exec()
-    }
-  })
+ Problem.remove({_id:id})
+ .exec()
   .then(result => {
     res.status(200).json({
       message:"problem Deleted successfully"
@@ -80,34 +67,9 @@ exports.update_problem = (req,res,next) =>{
   for(const ops of req.body)
   {
     updateOps[ops.proName] = ops.value;
-    if(ops.proName == '_id')
-    {
-      return res.status(401).json({
-        message:"cannot update id"
-      });
-    }
-    else if(ops.proName == 'user_id')
-    {
-      return res.status(401).json({
-        message:"cannot update user_id"
-      });
-    }
   }
-  Problem.findById(id)
-  .select('statement user_id')
+ Problem.update({_id:id},{$set:updateOps})
   .exec()
-  .then(doc => {
-    if(doc){
-      if(doc.user_id != req.userData.userId)
-      {
-        //console.log(doc.user_id+"---"+req.userData._id);
-        return res.status(404).json({
-         message:"You Can't Update"
-       });
-      }
-      return Problem.update({_id:id},{$set:updateOps}).exec()
-    }
-  })
   .then(result => {
     console.log(result);
     res.status(200).json({

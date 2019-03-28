@@ -76,21 +76,8 @@ Problem.findById(req.body.problem_id)
 }
 exports.delete_solution = (req,res,next)=>{
   const id = req.params.solutionId;
-  Solution.findById(id)
-  .select('statement user_id')
+Solution.remove({_id:id})
   .exec()
-  .then(doc => {
-    if(doc){
-      if(doc.user_id != req.userData.userId)
-      {
-        //console.log(doc.user_id+"---"+req.userData._id);
-        return res.status(404).json({
-         message:"You Can't Delete"
-       });
-      }
-      return Solution.remove({_id:id}).exec()
-    }
-  })
   .then(result => {
     res.status(200).json({
       message:"solution deleted successfully"
@@ -108,28 +95,9 @@ exports.update_solution = (req,res,next)=>{
   for(const ops of req.body)
   {
     updateOps[ops.proName] = ops.value;
-    if(ops.proName == '_id' || ops.proName == 'user_id' || ops.proName == 'problem_id')
-    {
-      return res.status(401).json({
-        message:"cannot update"
-      });
-    }
   }
-  Solution.findById(id)
-  .select(' user_id')
+ Solution.update({_id:id},{$set:updateOps})
   .exec()
-  .then(doc => {
-    if(doc){
-      if(doc.user_id != req.userData.userId)
-      {
-        //console.log(doc.user_id+"---"+req.userData._id);
-        return res.status(404).json({
-         message:"You Can't Update"
-       });
-      }
-      return Solution.update({_id:id},{$set:updateOps}).exec()
-    }
-  })
   .then(result => {
     console.log(result);
     res.status(200).json({

@@ -140,12 +140,6 @@ const updateOps ={};
 for(const ops of req.body)
 {
   updateOps[ops.proName] = ops.value;
-  if(ops.proName == '_id')
-  {
-    return res.status(401).json({
-      message:"cannot update id"
-    });
-  }
   if(ops.proName == 'email')
   {
     User.find({email:ops.value})
