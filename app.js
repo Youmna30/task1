@@ -7,10 +7,12 @@ const mongoose = require('mongoose');
 const userRoutes = require('./routes/Users');
 const problemRoutes = require('./routes/Problems');
 const solutionRoutes = require('./routes/Solutions');
+mongoose.set('useCreateIndex', true)
 
 mongoose.connect('mongodb+srv://root:'
 +process.env.MONGO_ATLAS_PW+
 '@task1-htnuc.mongodb.net/test?retryWrites=true'
+, { useNewUrlParser: true }
 );
 mongoose.Promise = global.Promise;
 app.use(morgan('dev'));
